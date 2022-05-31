@@ -2,4 +2,4 @@
 ## This is the code for team 6408X's Spin Up 2022-2023 Robot in VEX VRC
 
 ---
-Written with :heart: and C++/PROS
+Written with :heart: and the [PROS Library](https://pros.cs.purdue.edu/)
