@@ -45,4 +45,13 @@ void competition_initialize() {}
  */
 void opcontrol() {
 	
+    while (true) {
+        // Arcade drive with the left stick.
+        drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
+                                controller.getAnalog(ControllerAnalog::leftX));
+
+        // Wait and give up the time we don't need to other tasks.
+        // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.
+        pros::delay(10);
+    }
 }

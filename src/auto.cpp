@@ -12,5 +12,6 @@
  * from where it left off.
  */
 void autonomous() {
-    
+    // Move 1 meter to the first goal
+    drive->moveDistance(1_ft);
 }
