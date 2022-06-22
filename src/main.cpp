@@ -1,5 +1,34 @@
 #include "main.h"
-#include "devices.h"
+#include "okapi/api.hpp"
+#include "odommath.h"
+#include "pros/llemu.hpp"
+#include "pros/misc.h"
+#include "pros/misc.hpp"
+#include <string>
+
+using namespace okapi;
+
+int FrontLeft = 7;
+int FrontRight = 10;
+int BackLeft = -12;
+int BackRight = -11;
+Motor Lift (5);
+Controller controller;
+ControllerButton upButton (ControllerDigital::R1);
+ControllerButton downButton (ControllerDigital::R2);
+std::shared_ptr<OdomChassisController> drive = ChassisControllerBuilder()
+.withMotors(
+    FrontLeft, 
+    BackLeft, 
+    FrontRight, 
+    BackRight)
+.withDimensions(
+    AbstractMotor::gearset::green, 
+    {
+        {4_in, 11.5_in}, imev5GreenTPR
+        })
+.withOdometry()
+.buildOdometry();
 
 
 /**
@@ -8,8 +37,9 @@
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
-
+void initialize() 
+{
+    pros::lcd::initialize();
 }
 
 /**
@@ -43,13 +73,17 @@ void competition_initialize() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+ void autonomous(){
+    
+ }
 void opcontrol() {
 	
     while (true) {
-        // Arcade drive with the left stick.
+        // Arcade drive with the left stick on the controller.
         drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
                                 controller.getAnalog(ControllerAnalog::leftX));
-
+        OdomState state = drive->getState();
+        pros::lcd::print(0, "X: %f, Y: %f, Theta: %f", state.x.convert(inch), state.y.convert(inch), state.theta.convert(degree));
         // Wait and give up the time we don't need to other tasks.
         // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.
         pros::delay(10);
